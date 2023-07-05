@@ -6978,9 +6978,9 @@
                 "disableCollapsible": false
               },
               {
-                "id": "webpack-project",
-                "path": "/packages/webpack/generators/webpack-project",
-                "name": "webpack-project",
+                "id": "configuration",
+                "path": "/packages/webpack/generators/configuration",
+                "name": "configuration",
                 "children": [],
                 "isExternal": false,
                 "disableCollapsible": false

@@ -5,7 +5,7 @@ import {
 } from '@nx/devkit';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 
-import { webpackProjectGenerator } from './webpack-project';
+import { webpackProjectGenerator } from './configuration';
 
 describe('webpackProject', () => {
   let tree: Tree;

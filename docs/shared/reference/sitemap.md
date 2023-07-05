@@ -612,7 +612,7 @@
       - [ssr-dev-server](/packages/webpack/executors/ssr-dev-server)
     - [generators](/packages/webpack/generators)
       - [init](/packages/webpack/generators/init)
-      - [webpack-project](/packages/webpack/generators/webpack-project)
+      - [configuration](/packages/webpack/generators/configuration)
   - [workspace](/packages/workspace)
     - [documents](/packages/workspace/documents)
       - [Overview](/packages/workspace/documents/overview)

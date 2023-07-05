@@ -11792,20 +11792,20 @@
             "hash": "99cdafc92cde4ad672bcbf1429d09b0714e8fc4f"
           },
           {
-            "file": "packages/webpack/src/generators/webpack-project/schema.d.ts",
+            "file": "packages/webpack/src/generators/configuration/schema.d.ts",
             "hash": "061a7b6c67ccea001c134d716fa76a9f9660d46e"
           },
           {
-            "file": "packages/webpack/src/generators/webpack-project/schema.json",
+            "file": "packages/webpack/src/generators/configuration/schema.json",
             "hash": "4db682d96e432e9d10fb97f046596680d44b5344"
           },
           {
-            "file": "packages/webpack/src/generators/webpack-project/webpack-project.spec.ts",
+            "file": "packages/webpack/src/generators/configuration/configuration.spec.ts",
             "hash": "c4c4059f6a209178ee31e0133a1d1913a32bc086",
             "deps": ["devkit"]
           },
           {
-            "file": "packages/webpack/src/generators/webpack-project/webpack-project.ts",
+            "file": "packages/webpack/src/generators/configuration/configuration.ts",
             "hash": "08f2eca203c711b301cda3a5f614661943ee83e7",
             "deps": ["devkit"]
           },

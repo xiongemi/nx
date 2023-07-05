@@ -2743,11 +2743,11 @@
       },
       {
         "description": "Add webpack configuration to a project.",
-        "file": "generated/packages/webpack/generators/webpack-project.json",
+        "file": "generated/packages/webpack/generators/configuration.json",
         "hidden": true,
-        "name": "webpack-project",
-        "originalFilePath": "/packages/webpack/src/generators/webpack-project/schema.json",
-        "path": "webpack/generators/webpack-project",
+        "name": "configuration",
+        "originalFilePath": "/packages/webpack/src/generators/configuration/schema.json",
+        "path": "webpack/generators/configuration",
         "type": "generator"
       }
     ],

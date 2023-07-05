@@ -8,9 +8,9 @@
       "description": "Initialize the `@nrwl/webpack` plugin.",
       "hidden": true
     },
-    "webpack-project": {
-      "factory": "./src/generators/webpack-project/webpack-project#webpackProjectSchematic",
-      "schema": "./src/generators/webpack-project/schema.json",
+    "configuration": {
+      "factory": "./src/generators/configuration/configuration#webpackProjectSchematic",
+      "schema": "./src/generators/configuration/schema.json",
       "description": "Add webpack configuration to a project.",
       "hidden": true
     }
@@ -23,9 +23,9 @@
       "aliases": ["ng-add"],
       "hidden": true
     },
-    "webpack-project": {
-      "factory": "./src/generators/webpack-project/webpack-project#webpackProjectGenerator",
-      "schema": "./src/generators/webpack-project/schema.json",
+    "configuration": {
+      "factory": "./src/generators/configuration/configuration#webpackProjectGenerator",
+      "schema": "./src/generators/configuration/schema.json",
       "description": "Add webpack configuration to a project.",
       "hidden": true
     }

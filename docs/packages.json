@@ -378,7 +378,7 @@
     "path": "generated/packages/webpack.json",
     "schemas": {
       "executors": ["webpack", "dev-server", "ssr-dev-server"],
-      "generators": ["init", "webpack-project"]
+      "generators": ["init", "configuration"]
     }
   },
   {
