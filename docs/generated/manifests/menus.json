@@ -4647,9 +4647,9 @@
                 "disableCollapsible": false
               },
               {
-                "id": "cypress-e2e-configuration",
-                "path": "/packages/cypress/generators/cypress-e2e-configuration",
-                "name": "cypress-e2e-configuration",
+                "id": "configuration",
+                "path": "/packages/cypress/generators/configuration",
+                "name": "configuration",
                 "children": [],
                 "isExternal": false,
                 "disableCollapsible": false

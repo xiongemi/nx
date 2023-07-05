@@ -330,7 +330,7 @@
     - [generators](/packages/cypress/generators)
       - [init](/packages/cypress/generators/init)
       - [cypress-project](/packages/cypress/generators/cypress-project)
-      - [cypress-e2e-configuration](/packages/cypress/generators/cypress-e2e-configuration)
+      - [configuration](/packages/cypress/generators/configuration)
       - [cypress-component-configuration](/packages/cypress/generators/cypress-component-configuration)
       - [migrate-to-cypress-11](/packages/cypress/generators/migrate-to-cypress-11)
   - [detox](/packages/detox)

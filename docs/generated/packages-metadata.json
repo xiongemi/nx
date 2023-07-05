@@ -477,11 +477,11 @@
       },
       {
         "description": "Add a Cypress E2E Configuration to an existing project.",
-        "file": "generated/packages/cypress/generators/cypress-e2e-configuration.json",
+        "file": "generated/packages/cypress/generators/configuration.json",
         "hidden": false,
-        "name": "cypress-e2e-configuration",
-        "originalFilePath": "/packages/cypress/src/generators/cypress-e2e-configuration/schema.json",
-        "path": "cypress/generators/cypress-e2e-configuration",
+        "name": "configuration",
+        "originalFilePath": "/packages/cypress/src/generators/configuration/schema.json",
+        "path": "cypress/generators/configuration",
         "type": "generator"
       },
       {
