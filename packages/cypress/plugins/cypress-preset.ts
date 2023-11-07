@@ -1,6 +1,6 @@
 import { workspaceRoot } from '@nx/devkit';
 import { dirname, join, relative } from 'path';
-import { lstatSync } from 'fs';
+import { existsSync, lstatSync } from 'fs';
 
 import vitePreprocessor from '../src/plugins/preprocessor-vite';
 import { NX_PLUGIN_OPTIONS } from '../src/utils/symbols';
@@ -96,6 +96,16 @@ export function nxE2EPreset(
   options?: NxCypressE2EPresetOptions
 ) {
   const basePath = options?.cypressDir || 'src';
+
+  const dir = dirname(pathToConfig);
+  let supportFile: undefined | string = undefined;
+  for (const f of ['e2e.ts', 'e2e.js']) {
+    const candidate = join(dir, basePath, 'support', f);
+    if (existsSync(candidate)) {
+      supportFile = candidate;
+      break;
+    }
+  }
 
   const baseConfig: any /*Cypress.EndToEndConfigOptions & {
     [NX_PLUGIN_OPTIONS]: unknown;
