@@ -22,6 +22,7 @@ import { setupSsrForRemote } from './lib/setup-ssr-for-remote';
 import { setupTspathForRemote } from './lib/setup-tspath-for-remote';
 import { addRemoteToDynamicHost } from './lib/add-remote-to-dynamic-host';
 import { addMfEnvToTargetDefaultInputs } from '../../utils/add-mf-env-to-inputs';
+import { maybeJs } from '../../utils/maybe-js';
 
 export function addModuleFederationFiles(
   host: Tree,
@@ -60,6 +61,17 @@ export function addModuleFederationFiles(
       host.delete(pathToWebpackProdConfig);
     }
   }
+
+  if (options.js) {
+    host.rename(
+      join(options.appProjectRoot, 'src/main.ts'),
+      join(options.appProjectRoot, 'src/main.js')
+    );
+    host.rename(
+      join(options.appProjectRoot, 'src/remote-entry.ts'),
+      join(options.appProjectRoot, 'src/remote-entry.js')
+    );
+  }
 }
 
 export async function remoteGenerator(host: Tree, schema: Schema) {
@@ -77,6 +89,7 @@ export async function remoteGeneratorInternal(host: Tree, schema: Schema) {
     dynamic: schema.dynamic ?? false,
     // TODO(colum): remove when MF works with Crystal
     addPlugin: false,
+    remoteEntryPath: maybeJs(schema, 'src/remote-entry.ts'),
   };
   const initAppTask = await applicationGenerator(host, {
     ...options,
@@ -94,8 +107,8 @@ export async function remoteGeneratorInternal(host: Tree, schema: Schema) {
   // Renaming original entry file so we can use `import(./bootstrap)` in
   // new entry file.
   host.rename(
-    join(options.appProjectRoot, 'src/main.tsx'),
-    join(options.appProjectRoot, 'src/bootstrap.tsx')
+    join(options.appProjectRoot, maybeJs(options, 'src/main.tsx')),
+    join(options.appProjectRoot, maybeJs(options, 'src/bootstrap.tsx'))
   );
 
   addModuleFederationFiles(host, options);

@@ -165,6 +165,29 @@ describe('React Module Federation', () => {
       });
     }, 500_000);
 
+    it('should generate host and remote apps with js', async () => {
+      const shell = uniq('shell');
+      const remote1 = uniq('remote1');
+      const remote2 = uniq('remote2');
+      const remote3 = uniq('remote3');
+
+      await runCLIAsync(
+        `generate @nx/react:host ${shell} --js --remotes=${remote1},${remote2},${remote3} --style=css --no-interactive --projectNameAndRootFormat=derived --skipFormat`
+      );
+
+      expect(readPort(shell)).toEqual(4200);
+      expect(readPort(remote1)).toEqual(4201);
+      expect(readPort(remote2)).toEqual(4202);
+      expect(readPort(remote3)).toEqual(4203);
+
+      [shell, remote1, remote2, remote3].forEach((app) => {
+        ['development', 'production'].forEach(async (configuration) => {
+          const cliOutput = runCLI(`run ${app}:build:${configuration}`);
+          expect(cliOutput).toContain('Successfully ran target');
+        });
+      });
+    }, 500_000);
+
     it('should should support generating host and remote apps with the new name and root format', async () => {
       const shell = uniq('shell');
       const remote = uniq('remote');

@@ -27,6 +27,7 @@ export interface Schema {
   unitTestRunner: 'jest' | 'vitest' | 'none';
   typescriptConfiguration?: boolean;
   dynamic?: boolean;
+  remoteEntryPath?: string;
 }
 
 export interface NormalizedSchema extends ApplicationNormalizedSchema {

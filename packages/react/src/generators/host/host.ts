@@ -74,9 +74,10 @@ export async function hostGeneratorInternal(
         ssr: options.ssr,
         skipFormat: true,
         projectNameAndRootFormat: options.projectNameAndRootFormat,
-        typescriptConfiguration: options.typescriptConfiguration,
+        typescriptConfiguration: options.typescriptConfiguration ?? true,
         dynamic: options.dynamic,
         host: options.name,
+        js: options.js,
       });
       tasks.push(remoteTask);
       remotePort++;
