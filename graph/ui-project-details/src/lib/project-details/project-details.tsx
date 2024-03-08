@@ -26,6 +26,9 @@ export interface ProjectDetailsProps {
   project: ProjectGraphProjectNode;
   sourceMap: Record<string, string[]>;
   variant?: 'default' | 'compact';
+  getInputsForTarget?: (
+    targetName: string
+  ) => Promise<Record<string, string[]> | undefined>;
   onTargetCollapse?: (targetName: string) => void;
   onTargetExpand?: (targetName: string) => void;
   onViewInProjectGraph?: (data: { projectName: string }) => void;
@@ -50,6 +53,7 @@ export const ProjectDetails = forwardRef(
       },
       sourceMap,
       variant,
+      getInputsForTarget,
       onTargetCollapse,
       onTargetExpand,
       onViewInProjectGraph,
@@ -154,6 +158,7 @@ export const ProjectDetails = forwardRef(
                     targetName={targetName}
                     targetConfiguration={target}
                     sourceMap={sourceMap}
+                    getInputs={getInputsForTarget}
                     onRunTarget={onRunTarget}
                     onViewInTaskGraph={onViewInTaskGraph}
                     onCollapse={onTargetCollapse}

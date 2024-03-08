@@ -3,11 +3,11 @@ import { getTooltipService } from '../machines/get-services';
 import {
   ProjectEdgeNodeTooltip,
   ProjectNodeToolTip,
+  TaskInputsAccordion,
   TaskNodeTooltip,
   Tooltip,
 } from '@nx/graph/ui-tooltips';
 import { ProjectNodeActions } from './project-node-actions';
-import { TaskNodeActions } from './task-node-actions';
 import { getExternalApiService, useRouteConstructor } from '@nx/graph/shared';
 import { useNavigate } from 'react-router-dom';
 
@@ -125,7 +125,7 @@ export function TooltipDisplay() {
           openConfigCallback={onConfigClick}
           runTaskCallback={onRunTaskClick}
         >
-          <TaskNodeActions {...currentTooltip.props} />
+          <TaskInputsAccordion {...currentTooltip.props} />
         </TaskNodeTooltip>
       );
     }

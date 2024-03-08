@@ -1,21 +1,35 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
-import { TaskNodeTooltipProps } from '@nx/graph/ui-tooltips';
 import { useEffect, useState } from 'react';
 
-export function TaskNodeActions(props: TaskNodeTooltipProps) {
+export interface TaskInputsAccordionProps {
+  id: string; // task input id
+  inputs: Record<string, string[]>; // task input id
+  className?: string;
+  title?: string;
+}
+
+export function TaskInputsAccordion({
+  id,
+  inputs,
+  className,
+  title = 'Inputs',
+}: TaskInputsAccordionProps) {
   const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     setIsOpen(false);
-  }, [props.id]);
-  const project = props.id.split(':')[0];
+  }, [id]);
+  const project = id.split(':')[0];
+  if (inputs && Object.keys(inputs).length === 0) return null;
   return (
-    <div className="overflow-auto w-full min-w-[350px] max-w-full rounded-md border border-slate-200 dark:border-slate-800 w-full">
+    <div
+      className={`${className} overflow-auto w-full min-w-[350px] max-w-full rounded-md border border-slate-200 dark:border-slate-800 w-full`}
+    >
       <div
         className="flex justify-between items-center w-full bg-slate-50 px-4 py-2 text-xs font-medium uppercase text-slate-500 dark:bg-slate-800 dark:text-slate-400"
         onClick={() => setIsOpen(!isOpen)}
         data-cy="inputs-accordion"
       >
-        <span>Inputs</span>
+        <span>{title}</span>
         <span>
           {isOpen ? (
             <ChevronUpIcon className="h-4 w-4" />
@@ -29,29 +43,36 @@ export function TaskNodeActions(props: TaskNodeTooltipProps) {
           !isOpen && 'hidden'
         }`}
       >
-        {Object.entries(props.inputs ?? {})
+        {Object.entries(inputs ?? {})
           .sort(compareInputSectionKeys(project))
-          .map(([key, inputs]) => {
-            if (!inputs.length) return undefined;
+          .map(([key, files]) => {
+            if (!files.length) return undefined;
             if (key === 'general' || key === project) {
-              return renderInputs(inputs);
+              return renderInputs(files);
             }
             if (key === 'external') {
-              return InputAccordion({ section: 'External Inputs', inputs });
+              return InputAccordion({ section: 'External Inputs', files });
             }
 
-            return InputAccordion({ section: key, inputs });
+            return InputAccordion({ section: key, files });
           })}
       </ul>
     </div>
   );
 }
 
-function InputAccordion({ section, inputs }) {
+function InputAccordion({
+  section,
+  files,
+}: {
+  section: string;
+  files: string[];
+}) {
   const [isOpen, setIsOpen] = useState(false);
 
   return [
     <li
+      id={section}
       key={section}
       className="flex justify-between items-center whitespace-nowrap px-4 py-2 text-sm font-medium text-slate-800 dark:text-slate-300"
       onClick={() => setIsOpen(!isOpen)}
@@ -66,19 +87,19 @@ function InputAccordion({ section, inputs }) {
         )}
       </span>
     </li>,
-    isOpen ? renderInputs(inputs) : undefined,
+    isOpen ? renderInputs(files) : undefined,
   ];
 }
 
-function renderInputs(inputs: string[]) {
-  return inputs.map((input) => (
+function renderInputs(files: string[]) {
+  return files.map((file) => (
     <li
-      key={input}
+      key={file}
       className="whitespace-nowrap px-4 py-2 text-sm font-medium text-slate-800 dark:text-slate-300"
-      title={input}
+      title={file}
       data-cy="input-list-entry"
     >
-      <span className="block truncate font-normal">{input}</span>
+      <span className="block truncate font-normal">{file}</span>
     </li>
   ));
 }

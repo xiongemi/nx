@@ -7,6 +7,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ProjectGraphProjectNode } from '@nx/devkit';
 import {
   getExternalApiService,
+  getProjectGraphDataService,
   useEnvironmentConfig,
   useRouteConstructor,
 } from '@nx/graph/shared';
@@ -25,6 +26,7 @@ export function ProjectDetailsWrapper(props: ProjectDetailsProps) {
   const projectDetailsRef = useRef<ProjectDetailsImperativeHandle>(null);
   const environment = useEnvironmentConfig()?.environment;
   const externalApiService = getExternalApiService();
+  const projectDataService = getProjectGraphDataService();
   const navigate = useNavigate();
   const routeConstructor = useRouteConstructor();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -93,6 +95,19 @@ export function ProjectDetailsWrapper(props: ProjectDetailsProps) {
     }
   };
 
+  const getInpustForTarget = useCallback(
+    async (
+      targetName: string
+    ): Promise<Record<string, string[]> | undefined> => {
+      if (projectDataService.getExpandedTaskInputs) {
+        return projectDataService.getExpandedTaskInputs(
+          `${props.project.name}:${targetName}`
+        );
+      }
+    },
+    [projectDataService, props.project.name]
+  );
+
   const handleTargetCollapse = useCallback(
     (targetName: string) => {
       const expandedSections = searchParams.get('expanded')?.split(',') || [];
@@ -147,6 +162,7 @@ export function ProjectDetailsWrapper(props: ProjectDetailsProps) {
     <ProjectDetails
       ref={projectDetailsRef}
       {...props}
+      getInputsForTarget={getInpustForTarget}
       onTargetCollapse={handleTargetCollapse}
       onTargetExpand={handleTargetExpand}
       onViewInProjectGraph={handleViewInProjectGraph}

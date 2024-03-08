@@ -27,6 +27,7 @@ import { CopyToClipboard } from './copy-to-clipboard';
 import {
   ExternalLink,
   PropertyInfoTooltip,
+  TaskInputsAccordion,
   Tooltip,
 } from '@nx/graph/ui-tooltips';
 import { TooltipTriggerText } from './tooltip-trigger-text';
@@ -40,6 +41,9 @@ export interface TargetProps {
   targetConfiguration: TargetConfiguration;
   sourceMap: Record<string, string[]>;
   variant?: 'default' | 'compact';
+  getInputs?: (
+    targetName: string
+  ) => Promise<Record<string, string[]> | undefined>;
   onCollapse?: (targetName: string) => void;
   onExpand?: (targetName: string) => void;
   onRunTarget?: (data: { projectName: string; targetName: string }) => void;
@@ -62,6 +66,7 @@ export const TargetConfigurationDetails = forwardRef(
       targetName,
       targetConfiguration,
       sourceMap,
+      getInputs,
       onExpand,
       onCollapse,
       onViewInTaskGraph,
@@ -71,6 +76,7 @@ export const TargetConfigurationDetails = forwardRef(
   ) => {
     const isCompact = variant === 'compact';
     const [collapsed, setCollapsed] = useState(true);
+    const [inputs, setInputs] = useState<Record<string, string[]>>({});
 
     const handleCopyClick = async (copyText: string) => {
       await window.navigator.clipboard.writeText(copyText);
@@ -80,6 +86,16 @@ export const TargetConfigurationDetails = forwardRef(
       () => setCollapsed((collapsed) => !collapsed),
       [setCollapsed]
     );
+
+    useEffect(() => {
+      if (targetConfiguration.inputs && getInputs) {
+        getInputs(targetName).then((inputs) => {
+          if (inputs) {
+            setInputs(inputs);
+          }
+        });
+      }
+    }, [targetConfiguration.inputs, getInputs, targetName]);
 
     useEffect(() => {
       if (collapsed) {
@@ -349,6 +365,12 @@ export const TargetConfigurationDetails = forwardRef(
                     );
                   })}
                 </ul>
+                <TaskInputsAccordion
+                  className="mb-4"
+                  id={`${projectName}:${targetName}`}
+                  inputs={inputs}
+                  title="Files"
+                />
               </div>
             )}
             {targetConfiguration.outputs && (
