@@ -54,7 +54,7 @@ export function TargetConfigurationGroupList({
           </TargetConfigurationGroupContainer>
         );
       })}
-      <ul className={`mt-8 p-2 ${className}`}>
+      <ul className={`mt-4 p-2 ${className}`}>
         {targetsGroup.targets.map((targetName) => {
           return (
             <TargetConfigurationDetailsListItem
