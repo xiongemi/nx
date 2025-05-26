@@ -7,7 +7,6 @@ import dev.nx.gradle.runner.runTasksInParallel
 import dev.nx.gradle.util.logger
 import java.io.File
 import kotlin.system.exitProcess
-import kotlinx.coroutines.runBlocking
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.ProjectConnection
 
@@ -32,9 +31,7 @@ fun main(args: Array<String>) {
     connection =
         GradleConnector.newConnector().forProjectDirectory(File(options.workspaceRoot)).connect()
 
-    val results = runBlocking {
-      runTasksInParallel(connection, options.tasks, options.args, options.excludeTasks)
-    }
+    val results = runTasksInParallel(connection, options.tasks, options.args, options.excludeTasks)
 
     val reportJson = Gson().toJson(results)
     println(reportJson)

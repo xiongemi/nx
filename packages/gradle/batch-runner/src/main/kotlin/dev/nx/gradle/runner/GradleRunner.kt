@@ -6,19 +6,17 @@ import dev.nx.gradle.runner.OutputProcessor.buildTerminalOutput
 import dev.nx.gradle.runner.OutputProcessor.finalizeTaskResults
 import dev.nx.gradle.util.logger
 import java.io.ByteArrayOutputStream
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
 import org.gradle.tooling.BuildCancelledException
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.ProjectConnection
 import org.gradle.tooling.events.OperationType
 
-suspend fun runTasksInParallel(
+fun runTasksInParallel(
     connection: ProjectConnection,
     tasks: Map<String, GradleTask>,
     additionalArgs: String,
     excludeTasks: List<String>
-): Map<String, TaskResult> = coroutineScope {
+): Map<String, TaskResult> {
   logger.info("▶️ Running all tasks in a single Gradle run: ${tasks.keys.joinToString(", ")}")
 
   val (testClassTasks, buildTasks) = tasks.entries.partition { it.value.testClassName != null }
@@ -26,10 +24,10 @@ suspend fun runTasksInParallel(
   logger.info("🧪 Test launcher tasks: ${testClassTasks.joinToString(", ") { it.key }}")
   logger.info("🛠️ Build launcher tasks: ${buildTasks.joinToString(", ") { it.key }}")
 
-  val outputStream1 = ByteArrayOutputStream()
-  val errorStream1 = ByteArrayOutputStream()
-  val outputStream2 = ByteArrayOutputStream()
-  val errorStream2 = ByteArrayOutputStream()
+  val allResults = mutableMapOf<String, TaskResult>()
+
+  val outputStream = ByteArrayOutputStream()
+  val errorStream = ByteArrayOutputStream()
 
   val args = buildList {
     // --info is for terminal per task
@@ -38,41 +36,38 @@ suspend fun runTasksInParallel(
     // -Dorg.gradle.daemon.idletimeout=10000 is to kill daemon after 10 seconds
     addAll(listOf("--info", "--continue", "-Dorg.gradle.daemon.idletimeout=10000"))
     addAll(additionalArgs.split(" ").filter { it.isNotBlank() })
-    excludeTasks.forEach {
-      add("--exclude-task")
-      add(it)
+
+    // Add --exclude-task for each excluded task
+    if (excludeTasks.isNotEmpty()) {
+      excludeTasks.forEach { taskName ->
+        add("--exclude-task")
+        add(taskName)
+      }
     }
   }
-
   logger.info("🏳️ Args: ${args.joinToString(", ")}")
 
-  val buildJob = async {
-    if (buildTasks.isNotEmpty()) {
-      runBuildLauncher(
-          connection,
-          buildTasks.associate { it.key to it.value },
-          args,
-          outputStream1,
-          errorStream1)
-    } else emptyMap()
+  if (buildTasks.isNotEmpty()) {
+    allResults.putAll(
+        runBuildLauncher(
+            connection,
+            buildTasks.associate { it.key to it.value },
+            args,
+            outputStream,
+            errorStream))
   }
 
-  val testJob = async {
-    if (testClassTasks.isNotEmpty()) {
-      runTestLauncher(
-          connection,
-          testClassTasks.associate { it.key to it.value },
-          args,
-          outputStream2,
-          errorStream2)
-    } else emptyMap()
+  if (testClassTasks.isNotEmpty()) {
+    allResults.putAll(
+        runTestLauncher(
+            connection,
+            testClassTasks.associate { it.key to it.value },
+            args,
+            outputStream,
+            errorStream))
   }
 
-  val allResults = mutableMapOf<String, TaskResult>()
-  allResults.putAll(buildJob.await())
-  allResults.putAll(testJob.await())
-
-  return@coroutineScope allResults
+  return allResults
 }
 
 fun runBuildLauncher(
